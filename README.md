@@ -1,9 +1,11 @@
-# @npm/types
+# @qiwi/npm-types
+
+The fork of [npm/types](https://github.com/npm/types) that fixes the most vulnerabilities and brings deps from 2020
 
 Typescript definitions for npm registry content
 
 ```typescript
-import * as npm from '@npm/types';
+import * as npm from '@qiwi/npm-types';
 
 const pkg = require('pacote');
 

@@ -1,6 +1,6 @@
 {
-  "name": "@npm/types",
-  "version": "1.0.1",
+  "name": "@qiwi/npm-types",
+  "version": "0.0.0",
   "description": "Typescript definitions for npm registry content",
   "private": false,
   "publishConfig": {
