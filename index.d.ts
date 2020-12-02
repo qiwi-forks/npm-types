@@ -18,7 +18,7 @@ export interface PackageJson {
   contributors?: Maintainer[];
   license?: string;
   repository?: Repository;
-  depedencies?: Dependencies;
+  dependencies?: Dependencies;
   devDependencies?: Dependencies;
   peerDependencies?: Dependencies;
   bundleDependencies?: Dependencies;
@@ -60,7 +60,7 @@ export interface Packument {
   // left out users (stars) deprecated, and attachments (does nothing)
   readmeFilename?: string;
 }
-  
+
 // https://docs.npmjs.com/files/package-lock.json
 export interface PackageLock {
   name: string;
@@ -100,11 +100,12 @@ export interface PackumentVersion extends PackageJson {
   dist: Dist;
   _hasShrinkwrap?: boolean;
   types?: string;
+  deprecated?: string;
 }
 
 /**
  * abbreviated metadata format (aka corgi)
- *  
+ *
  * https://github.com/npm/registry/blob/master/docs/responses/package-metadata.md#abbreviated-metadata-format
  * returned from registry requests with accept header values conianing
  * `application/vnd.npm.install-v1+json`
@@ -160,7 +161,7 @@ export interface Dist {
    */
   unpackedSize?: number;
   /**
-   * pgp signed package signature 
+   * pgp signed package signature
    * https://blog.npmjs.org/post/172999548390/new-pgp-machinery
    */
   'npm-signature'?: string;
