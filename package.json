@@ -24,9 +24,7 @@
     "posttest": "npm run check",
     "test": "echo 'compilation worked!'",
     "docs": "mkdir -p docs && cp ./README.md ./docs/README.md",
-    "build": "npm run docs",
-    "test:report": "npm run test && npm run push:report",
-    "push:report": "npm run coveralls:push"
+    "build": "npm run docs"
   },
   "keywords": [],
   "author": "Chris Dickinson <chris@neversaw.us> (http://neversaw.us/)",
@@ -39,7 +37,6 @@
   ],
   "devDependencies": {
     "@types/node": "^14.14.10",
-    "coveralls": "^3.1.0",
     "eslint": "^7.14.0",
     "eslint-config-qiwi": "^1.10.0",
     "gts": "^3.0.2",
