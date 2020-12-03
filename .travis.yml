@@ -1,0 +1,77 @@
+language: node_js
+cache: npm
+node_js: 14
+install: skip
+dist: focal
+
+jobs:
+  fast_finish: true
+  include:
+    - stage: verify
+      if: branch != master AND type != pull_request
+      os: linux
+      install: npm install
+      script:
+        - npm run build
+        - npm run test
+    - &build
+      stage: build
+      if: branch = master
+      os: linux
+      install: npm install
+      script: npm run build
+      # https://docs.travis-ci.com/user/using-workspaces/
+      workspaces:
+        create:
+          name: linux-shared
+          paths:
+            - docs
+            - node_modules
+            - index.d.ts
+    - <<: *build
+      os: windows
+      if: branch = master AND env(CI_WIN_BUILD) = true AND type = pull_request
+      # https://travis-ci.community/t/timeout-after-build-finished-and-succeeded/1336/2
+      env: YARN_GPG=no
+      workspaces:
+        create:
+          name: win-shared
+          paths:
+            - docs
+            - node_modules
+            - index.d.ts
+
+    - &test
+      if: branch = master AND type = pull_request
+      stage: test
+      os: linux
+      install: skip
+      script: npm run test
+      workspaces:
+        use: linux-shared
+    - <<: *test
+      node_js: 12
+    - <<: *test
+      if: branch = master AND type != pull_request
+      before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+      script: npm run test:report
+      after_script:
+        - ./cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+    - <<: *test
+      if: branch = master AND type = pull_request AND env(CI_WIN_BUILD) = true
+      os: windows
+      env: YARN_GPG=no
+      workspaces:
+        use: win-shared
+
+    - stage: release
+      if: branch = master AND type != pull_request AND env(CI_RELEASE) = true
+      workspaces:
+        use: linux-shared
+      install: skip
+      script: npx -p @qiwi/semrel-toolkit semrel -e @qiwi/semrel-config
+      # script: echo 'Deploy step is disabled' && exit 0
