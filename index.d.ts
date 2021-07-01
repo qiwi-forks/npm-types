@@ -23,6 +23,7 @@ export interface PackageJson {
   peerDependencies?: Dependencies;
   bundleDependencies?: Dependencies;
   bundledDependencies?: Dependencies;
+  optionalDependencies?: Dependencies;
   engines?: ObjectOfStrings;
   files?: string[];
   bin?: {[key: string]: string};
